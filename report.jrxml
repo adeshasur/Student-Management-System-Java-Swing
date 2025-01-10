@@ -1,0 +1,94 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="report" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<query language="SQL"><![CDATA[SELECT marks.*,
+       student.stname AS stname
+FROM marks
+JOIN student ON marks.stid = student.id]]></query>
+	<field name="subject" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="subject"/>
+		<property name="com.jaspersoft.studio.field.label" value="subject"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="marks"/>
+	</field>
+	<field name="marks" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="marks"/>
+		<property name="com.jaspersoft.studio.field.label" value="marks"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="marks"/>
+	</field>
+	<field name="term" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="term"/>
+		<property name="com.jaspersoft.studio.field.label" value="term"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="marks"/>
+	</field>
+	<field name="stname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="stname"/>
+		<property name="com.jaspersoft.studio.field.label" value="stname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="student"/>
+	</field>
+	<group name="subject">
+		<expression><![CDATA[$F{subject}]]></expression>
+	</group>
+	<group name="marks">
+		<expression><![CDATA[$F{marks}]]></expression>
+	</group>
+	<group name="term">
+		<expression><![CDATA[$F{term}]]></expression>
+	</group>
+	<group name="stname">
+		<expression><![CDATA[$F{stname}]]></expression>
+	</group>
+	<background splitType="Stretch"/>
+	<title height="107" splitType="Stretch">
+		<element kind="staticText" uuid="a6a1bc57-6a84-4f38-8520-a0b129389f55" x="7" y="17" width="540" height="59" fontSize="30.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[School Managment System]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+		</element>
+		<element kind="staticText" uuid="71e70b62-a5bc-40ce-b181-c9030bdcbd84" x="7" y="63" width="540" height="44" fontSize="24.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Student Marks]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+		</element>
+	</title>
+	<pageHeader height="49" splitType="Stretch"/>
+	<columnHeader height="61" splitType="Stretch">
+		<element kind="staticText" uuid="7c5e2eb7-52de-4fd3-b102-fe88ea2ea311" x="10" y="30" width="150" height="30" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Name]]></text>
+		</element>
+		<element kind="staticText" uuid="c8873b26-9d9b-4c0d-8278-9cc47e4adb50" x="190" y="30" width="100" height="30" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Subject]]></text>
+		</element>
+		<element kind="staticText" uuid="732b2b0f-2846-4cd3-a41d-22a11f923c1f" x="320" y="30" width="80" height="30" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Term]]></text>
+		</element>
+		<element kind="staticText" uuid="7a07b640-9a3a-4af6-abae-dcce47ef63d5" x="450" y="30" width="80" height="30" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Marks]]></text>
+		</element>
+		<element kind="line" uuid="65e31966-65f8-4ee0-ba74-9111c390da4f" x="0" y="21" width="560" height="1"/>
+	</columnHeader>
+	<detail>
+		<band height="315" splitType="Stretch">
+			<element kind="textField" uuid="51fb82c4-c04c-4702-938c-2162ce8733a9" x="10" y="10" width="150" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{stname}]]></expression>
+			</element>
+			<element kind="textField" uuid="aa95d2e1-1da0-460d-aa27-bc067c54529d" x="190" y="10" width="100" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{subject}]]></expression>
+			</element>
+			<element kind="textField" uuid="9d006cae-426a-41db-bc2c-a4ee1739ef27" x="320" y="10" width="80" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{term}]]></expression>
+			</element>
+			<element kind="textField" uuid="f09b2fe2-265c-40b2-89fb-f1d87de59e95" x="451" y="10" width="80" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{marks}]]></expression>
+			</element>
+			<element kind="line" uuid="857167aa-a0ba-4563-81a4-3c3b914fb540" x="0" y="-1" width="560" height="1"/>
+			<element kind="line" uuid="0fe35caa-3d31-4e46-a35b-f8fe6f27dd98" x="0" y="-40" width="1" height="350"/>
+			<element kind="line" uuid="a7f04529-0396-4ae2-ab13-bc4bc325dd0b" x="559" y="-40" width="1" height="350"/>
+			<element kind="line" uuid="3466689c-ff31-4759-a07e-4c8599377ed0" x="421" y="-40" width="1" height="350"/>
+			<element kind="line" uuid="63d50db8-2921-41b5-adc1-804e84fc0b93" x="304" y="-40" width="1" height="350"/>
+			<element kind="line" uuid="111b8c1f-8400-445e-b481-4025aacbe306" x="173" y="-40" width="1" height="350"/>
+			<element kind="line" uuid="5bfa4173-7f8e-42f4-adfa-d42be826c6b7" x="0" y="310" width="560" height="1"/>
+		</band>
+	</detail>
+	<columnFooter height="45" splitType="Stretch"/>
+	<pageFooter height="54" splitType="Stretch"/>
+	<summary height="42" splitType="Stretch"/>
+</jasperReport>
