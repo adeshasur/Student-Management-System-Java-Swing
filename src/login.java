@@ -1,20 +1,26 @@
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author 𝐙𝐚𝐥𝐥𝐤𝐲 𝐍𝐞𝐨
@@ -28,8 +34,6 @@ public class login extends javax.swing.JFrame {
         initComponents();
         Connect();
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,12 +45,11 @@ public class login extends javax.swing.JFrame {
     PreparedStatement pst;
     ResultSet rs;
     DefaultTableModel d;
-    
-    public void Connect()
-    {
+
+    public void Connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment", "root", "");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(user.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -170,44 +173,9 @@ public class login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String username = txtuname.getText();
-        String pass = txtpass.getText();
-        String utype = txtutype.getSelectedItem().toString();
-        
-        try {
-            pst = con.prepareStatement("select * from user where uname = ? and password =? and utype=?");
-            pst.setString(1, username);
-            pst.setString(2, pass);
-            pst.setString(3, utype);
-            rs = pst.executeQuery();
-            if (rs.next())
-            {
-                int id = rs.getInt("id");
-                this.setVisible(false);
-                
-                if(utype.equals("Admin"))
-                {
-                    new main (id,username,utype).setVisible(true);
-                }
-                else if(utype.equals("Teacher"))
-                {
-                    new teachermain (id,username,utype).setVisible(true);
-                }
-//                new main(id,username,utype).setVisible(true);
-            }
-            else{
-            JOptionPane.showMessageDialog(this,"Username or Password Do not Match");
-            txtuname.setText("");
-            txtpass.setText("");
-            txtutype.setSelectedIndex(-1);
-            txtuname.requestFocus();
-            
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+       loginToSystem();
+//        testJasper();
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -257,4 +225,42 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JTextField txtuname;
     private javax.swing.JComboBox<String> txtutype;
     // End of variables declaration//GEN-END:variables
+
+    private void testJasper() {
+        
+    }
+
+    private void loginToSystem() {
+        String username = txtuname.getText();
+        String pass = txtpass.getText();
+        String utype = txtutype.getSelectedItem().toString();
+
+        try {
+            pst = con.prepareStatement("select * from user where uname = ? and password =? and utype=?");
+            pst.setString(1, username);
+            pst.setString(2, pass);
+            pst.setString(3, utype);
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                this.setVisible(false);
+
+                if (utype.equals("Admin")) {
+                    new main(id, username, utype).setVisible(true);
+                } else if (utype.equals("Teacher")) {
+                    new teachermain(id, username, utype).setVisible(true);
+                }
+//                new main(id,username,utype).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Username or Password Do not Match");
+                txtuname.setText("");
+                txtpass.setText("");
+                txtutype.setSelectedIndex(-1);
+                txtuname.requestFocus();
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

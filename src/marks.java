@@ -1,9 +1,11 @@
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -13,6 +15,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -114,19 +117,26 @@ public class marks extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel8.setText("Marks");
 
-        jPanel2.setBackground(new java.awt.Color(153, 255, 153));
+        jPanel2.setBackground(new java.awt.Color(51, 153, 0));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.setForeground(new java.awt.Color(255, 255, 255));
 
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Student Number");
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Student Name");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Class");
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Subject");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marks");
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Term");
 
         txtterm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
@@ -145,7 +155,9 @@ public class marks extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Print");
+        jButton4.setBackground(new java.awt.Color(255, 51, 51));
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Report");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -341,27 +353,71 @@ public class marks extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-         try {
-        // Load MySQL driver and establish a connection
+printReport();
+
+//        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment", "root", "");
+//            String reportPath = "C:\\Users\\Tunix\\Desktop\\Student Managment\\StudentManagment\\report.jrxml";
+//
+//            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+//            JasperPrint jp = JasperFillManager.fillReport(jr, null, con);
+//            JasperViewer.viewReport(jp, false);
+//
+//    } catch (Exception e) {
+//            JOptionPane.showMessageDialog(rootPane, "Error: " + e.getMessage());
+//        }
+        
+        
+        
+    try {
+        // Load MySQL JDBC driver
         Class.forName("com.mysql.cj.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment", "root", "");
+        
+        // Create a connection to the database
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment", "root", "");
+        System.out.println("[Info]"+con);
+        
+        // Load the JRXML file from resources
+        String reportPath = "\\lmarks.jrxml";
+        
+        InputStream reportStream =getClass().getResourceAsStream(reportPath);
+        //System.out.println(reportStream);
+        
+        if(reportStream==null){
+            System.out.println("file not found");
+            return;
+        }
+        
+        if (reportPath == null) {
+            JOptionPane.showMessageDialog(null, "Report file not found!");
+            return;
+        }
 
-        // Path to your .jrxml file
-        String reportPath = "C:\\Users\\Tunix\\Desktop\\Student Managment\\StudentManagment\\report.jrxml";
+        // Compile the JRXML file into a JasperReport object
+        JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+        System.out.println("[info]"+jasperReport);
+        
 
-        // Compile the .jrxml file into a JasperReport object
-        JasperReport jr = JasperCompileManager.compileReport(reportPath);
-
-        // Fill the report with data from the database
-        JasperPrint jp = JasperFillManager.fillReport(jr, null, con);
-
-        // Display the report using JasperViewer
-        JasperViewer.viewReport(jp, false);
-
+//         Fill the report with data from the database
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,new HashMap<>(), con);
+        System.out.println("[Info]"+jasperPrint);
+//
+//        // Display the report using the JasperViewer
+        JasperViewer.viewReport(jasperPrint, false);
+//
+//        // Close the database connection
+//        con.close();
+        
     } catch (Exception e) {
-        // Show error message
-        JOptionPane.showMessageDialog(rootPane, "Error: " + e.getMessage());
-    }
+        // Show the error message
+        //JOptionPane.showMessageDialog(null, e.getMessage());
+        System.out.println("Error: " + e.getMessage());
+    } 
+         
+    
+
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -421,4 +477,46 @@ public class marks extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> txtsubject;
     private javax.swing.JComboBox<String> txtterm;
     // End of variables declaration//GEN-END:variables
+//------------------------------------------------------------------------------
+    private void printReport() {
+       try {
+            // Load MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Create a connection to the database
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/schoolmanagment", "root", "");
+
+            // Load the JRXML file from resources
+            String reportPath = "\\marks.jrxml";
+
+            InputStream reportStream = getClass().getResourceAsStream(reportPath);
+            //System.out.println(reportStream);
+
+            if (reportStream == null) {
+                System.out.println("file not found");
+                return;
+            }
+            // Compile the JRXML file into a JasperReport object
+            JasperReport jr = JasperCompileManager.compileReport(reportStream);
+            System.out.println("[Info]" + jr);
+
+//         Fill the report with data from the database
+            JasperPrint jp = JasperFillManager.fillReport(jr, null, con);
+            System.out.println("[Info]" + jp);
+//
+//        // Display the report using the JasperViewer
+            JasperViewer.viewReport(jp);
+//
+//        // Close the database connection
+//        con.close();
+
+        } catch (ClassNotFoundException classNotFoundException) {
+            System.err.println("[error]" + classNotFoundException);
+        } catch (SQLException sQLException) {
+            System.err.println("[error]" + sQLException);
+        } catch (Exception exception) {
+            System.err.println("[error]" + exception);
+        }
+    }
+    
 }
