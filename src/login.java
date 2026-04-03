@@ -64,18 +64,110 @@ public class login extends javax.swing.JFrame {
             stmt.execute("CREATE TABLE IF NOT EXISTS EXAM (EXAMID INT PRIMARY KEY AUTO_INCREMENT, EXAMNAME VARCHAR(255), DATE DATE, CLASS VARCHAR(255), SECTION VARCHAR(255), SUBJECT VARCHAR(255))");
             stmt.execute("CREATE TABLE IF NOT EXISTS MARKS (MARKID INT PRIMARY KEY AUTO_INCREMENT, STID INT, STNAME VARCHAR(255), CLASS VARCHAR(255), SUBJECT VARCHAR(255), MARKS INT)");
 
-            // Seed default admin user if USERS table is empty
+            // Seed all sample data only when USERS table is completely empty
             java.sql.ResultSet rsCheck = stmt.executeQuery("SELECT COUNT(*) FROM USERS");
             if (rsCheck.next() && rsCheck.getInt(1) == 0) {
-                System.out.println("No users found. Inserting default admin account...");
-                stmt.execute("INSERT INTO USERS (NAME, PHONE, ADDRESS, UNAME, PASSWORD, UTYPE) VALUES ('Amal Silva', 715689652, '56/8A Yakkala, Gampaha', 'admin', 'admin', 'Admin')");
-                stmt.execute("INSERT INTO USERS (NAME, PHONE, ADDRESS, UNAME, PASSWORD, UTYPE) VALUES ('Kasuni', 4554555, 'Colombo', 'Kasuni', '1234', 'Teacher')");
-                System.out.println("Default accounts created.");
+                System.out.println("Empty database detected. Seeding sample data...");
+
+                // ── USERS (Admin + Teachers) ──────────────────────────
+                stmt.execute("INSERT INTO USERS (NAME,PHONE,ADDRESS,UNAME,PASSWORD,UTYPE) VALUES ('Amal Silva',715689652,'56/8A Yakkala, Gampaha','admin','admin','Admin')");
+                stmt.execute("INSERT INTO USERS (NAME,PHONE,ADDRESS,UNAME,PASSWORD,UTYPE) VALUES ('Kasuni Perera',771234567,'12/B Kandy Road, Colombo','Kasuni','1234','Teacher')");
+                stmt.execute("INSERT INTO USERS (NAME,PHONE,ADDRESS,UNAME,PASSWORD,UTYPE) VALUES ('Nimal Fernando',762345678,'34/C Galle Road, Matara','Nimal','1234','Teacher')");
+                stmt.execute("INSERT INTO USERS (NAME,PHONE,ADDRESS,UNAME,PASSWORD,UTYPE) VALUES ('Sanduni Jayawardena',753456789,'78/D Negombo Road, Ja-Ela','Sanduni','1234','Teacher')");
+
+                // ── CLASSES ────────────────────────────────────────────
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 6','A')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 6','B')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 7','A')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 7','B')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 8','A')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 8','B')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 9','A')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 9','B')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 10','A')");
+                stmt.execute("INSERT INTO CLASS (CLASSNAME,SECTION) VALUES ('Grade 10','B')");
+
+                // ── SUBJECTS ───────────────────────────────────────────
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('Mathematics')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('Science')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('English')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('Sinhala')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('History')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('ICT')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('Art')");
+                stmt.execute("INSERT INTO SUBJECT (SUBJECTNAME) VALUES ('Health & PE')");
+
+                // ── STUDENTS ───────────────────────────────────────────
+                // Grade 6 - A
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Kavya Rathnayake','Sunil Rathnayake','2012-03-14','Female','0771110001','23 Lake Rd, Colombo','Grade 6','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Dineth Kumara','Pradeep Kumara','2012-07-22','Male','0772220002','45 Hill St, Kandy','Grade 6','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Shenal Wijesinghe','Rohan Wijesinghe','2012-11-05','Male','0773330003','67 Beach Ave, Galle','Grade 6','A')");
+                // Grade 6 - B
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Amaya Dissanayake','Chaminda Dissanayake','2012-01-18','Female','0774440004','89 Park Ln, Negombo','Grade 6','B')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Thisara Jayasekara','Lasitha Jayasekara','2012-09-30','Male','0775550005','12 River Rd, Matale','Grade 6','B')");
+                // Grade 7 - A
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Senuri Pathirana','Aruna Pathirana','2011-04-12','Female','0776660006','34 Temple Rd, Kurunegala','Grade 7','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Muditha Bandara','Gamini Bandara','2011-06-25','Male','0777770007','56 Main St, Anuradhapura','Grade 7','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Hasini Samarakoon','Upul Samarakoon','2011-12-08','Female','0778880008','78 Fort Rd, Trincomalee','Grade 7','A')");
+                // Grade 7 - B
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Sachith Madushanka','Bandula Madushanka','2011-02-14','Male','0779990009','90 Galle Rd, Moratuwa','Grade 7','B')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Dilhara Weerasinghe','Ajith Weerasinghe','2011-08-19','Female','0770001010','11 Baseline Rd, Colombo 9','Grade 7','B')");
+                // Grade 8 - A
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Pasindu Liyanage','Channa Liyanage','2010-05-27','Male','0771111011','22 Kandy Rd, Kegalle','Grade 8','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Thilini Gunasekara','Priya Gunasekara','2010-10-03','Female','0772222012','44 High Level Rd, Maharagama','Grade 8','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Ravindu Perera','Sanjeewa Perera','2010-03-16','Male','0773333013','66 Hospital Rd, Ratnapura','Grade 8','A')");
+                // Grade 9 - A
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Ishara Wickramasinghe','Nalinda Wickramasinghe','2009-07-09','Female','0774444014','88 Matara Rd, Hambantota','Grade 9','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Dasun Rajapaksha','Ranjan Rajapaksha','2009-11-21','Male','0775555015','10 Pettah, Colombo 11','Grade 9','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Nimasha Chamara','Thilak Chamara','2009-01-30','Female','0776666016','32 Union Place, Colombo 2','Grade 9','A')");
+                // Grade 10 - A
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Kasun Abeysekara','Manoj Abeysekara','2008-04-04','Male','0777777017','54 Flower Rd, Colombo 7','Grade 10','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Ridma Kariyawasam','Pradeep Kariyawasam','2008-09-13','Female','0778888018','76 Ward Place, Colombo 7','Grade 10','A')");
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Chanaka Madushan','Saman Madushan','2008-02-28','Male','0779999019','98 Duplication Rd, Colombo 3','Grade 10','A')");
+                // Grade 10 - B
+                stmt.execute("INSERT INTO STUDENT (STNAME,PNAME,DOB,GENDER,PHONE,ADDRESS,CLASS,SECTION) VALUES ('Ashini Rodrigo','Bertram Rodrigo','2008-06-17','Female','0770000020','20 Aloe Ave, Colombo 6','Grade 10','B')");
+
+                // ── EXAMS ──────────────────────────────────────────────
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Term 1 Maths','2026-02-10','Grade 6','A','Mathematics')");
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Term 1 Science','2026-02-11','Grade 6','A','Science')");
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Term 1 Maths','2026-02-10','Grade 7','A','Mathematics')");
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Term 1 English','2026-02-12','Grade 7','A','English')");
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Mid Year Maths','2026-07-05','Grade 9','A','Mathematics')");
+                stmt.execute("INSERT INTO EXAM (EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES ('Mid Year ICT','2026-07-06','Grade 10','A','ICT')");
+
+                // ── MARKS ──────────────────────────────────────────────
+                // Grade 6-A — Term 1 Maths (STID 1,2,3)
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (1,'Kavya Rathnayake','Grade 6','Mathematics',88)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (2,'Dineth Kumara','Grade 6','Mathematics',74)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (3,'Shenal Wijesinghe','Grade 6','Mathematics',91)");
+                // Grade 6-A — Term 1 Science
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (1,'Kavya Rathnayake','Grade 6','Science',79)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (2,'Dineth Kumara','Grade 6','Science',65)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (3,'Shenal Wijesinghe','Grade 6','Science',83)");
+                // Grade 7-A — Term 1 Maths (STID 6,7,8)
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (6,'Senuri Pathirana','Grade 7','Mathematics',95)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (7,'Muditha Bandara','Grade 7','Mathematics',68)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (8,'Hasini Samarakoon','Grade 7','Mathematics',82)");
+                // Grade 7-A — Term 1 English
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (6,'Senuri Pathirana','Grade 7','English',88)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (7,'Muditha Bandara','Grade 7','English',71)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (8,'Hasini Samarakoon','Grade 7','English',90)");
+                // Grade 9-A — Mid Year Maths (STID 14,15,16)
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (14,'Ishara Wickramasinghe','Grade 9','Mathematics',77)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (15,'Dasun Rajapaksha','Grade 9','Mathematics',84)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (16,'Nimasha Chamara','Grade 9','Mathematics',92)");
+                // Grade 10-A — Mid Year ICT (STID 17,18,19)
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (17,'Kasun Abeysekara','Grade 10','ICT',85)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (18,'Ridma Kariyawasam','Grade 10','ICT',93)");
+                stmt.execute("INSERT INTO MARKS (STID,STNAME,CLASS,SUBJECT,MARKS) VALUES (19,'Chanaka Madushan','Grade 10','ICT',70)");
+
+                System.out.println("Sample data seeded successfully.");
             } else {
                 System.out.println("Database tables ready.");
             }
             rsCheck.close();
             stmt.close();
+
         } catch (Exception ex) {
             ex.printStackTrace();
             System.err.println("DATABASE ERROR: " + ex.getMessage());
