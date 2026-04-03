@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.event.*;
-import java.io.InputStream;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -22,7 +19,7 @@ public class marks extends JFrame {
     private JComboBox<String> txtclass, txtsubject, txtterm;
     private JTable       markstable;
     private JScrollPane  jScrollPane1;
-    private JButton      jButton1, jButton2, jButton3, jButton4, jButton5;
+    private JButton      jButton1, jButton2, jButton3, jButton4;
 
     public marks() {
         UITheme.applyGlobalDefaults();
@@ -56,7 +53,7 @@ public class marks extends JFrame {
         try {
             Class.forName("org.h2.Driver");
             Connection rc = DriverManager.getConnection(UITheme.dbUrl(), "sa", "");
-            InputStream rs2 = getClass().getResourceAsStream("\\marks.jrxml");
+            java.io.InputStream rs2 = getClass().getResourceAsStream("marks.jrxml");
             if (rs2 == null) { System.out.println("Report file not found"); return; }
             JasperReport jr = JasperCompileManager.compileReport(rs2);
             JasperPrint jp = JasperFillManager.fillReport(jr, null, rc);
@@ -72,9 +69,8 @@ public class marks extends JFrame {
         header.setBackground(UITheme.SURFACE);
         header.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0,0,1,0,UITheme.BORDER),new EmptyBorder(14,24,14,24)));
         header.setPreferredSize(new Dimension(0,60));
-        header.add(UITheme.label("📊  Marks Entry",18f,true),BorderLayout.WEST);
-        jButton5 = UITheme.button("✕  Close",UITheme.MUTED); jButton5.addActionListener(e -> dispose());
-        header.add(jButton5,BorderLayout.EAST); root.add(header,BorderLayout.NORTH);
+        header.add(UITheme.label("Marks Entry",18f,true),BorderLayout.WEST);
+        root.add(header,BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20,0)); body.setBackground(UITheme.BG); body.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -87,7 +83,7 @@ public class marks extends JFrame {
         JLabel lno=UITheme.mutedLabel("Student ID"); lno.setAlignmentX(LEFT_ALIGNMENT); form.add(lno); form.add(Box.createVerticalStrut(3));
         JPanel searchRow = new JPanel(new BorderLayout(6,0)); searchRow.setOpaque(false); searchRow.setMaximumSize(new Dimension(Integer.MAX_VALUE,34)); searchRow.setAlignmentX(LEFT_ALIGNMENT);
         txtno = UITheme.textField(""); searchRow.add(txtno,BorderLayout.CENTER);
-        jButton1 = UITheme.button("🔍",UITheme.ACCENT); jButton1.setPreferredSize(new Dimension(44,34)); searchRow.add(jButton1,BorderLayout.EAST);
+        JButton searchBtn = UITheme.button("Find",UITheme.ACCENT); searchBtn.setPreferredSize(new Dimension(60,34)); searchRow.add(searchBtn,BorderLayout.EAST);
         form.add(searchRow); form.add(Box.createVerticalStrut(10));
 
         JLabel lname=UITheme.mutedLabel("Student Name"); lname.setAlignmentX(LEFT_ALIGNMENT); form.add(lname); form.add(Box.createVerticalStrut(3));
@@ -104,31 +100,24 @@ public class marks extends JFrame {
         txtterm = addC(form,"Term",new String[]{"Term 1","Term 2","Mid Year","Annual"});
         form.add(Box.createVerticalStrut(16));
 
-        jButton3 = UITheme.button("💾 Save Marks",UITheme.ACCENT);
-        jButton4 = UITheme.button("📄 Print Report",UITheme.PURPLE);
-        jButton2 = UITheme.button("✕ Clear",UITheme.MUTED);
-        for(JButton b:new JButton[]{jButton3,jButton4,jButton2}){b.setAlignmentX(LEFT_ALIGNMENT);b.setMaximumSize(new Dimension(Integer.MAX_VALUE,36));form.add(b);form.add(Box.createVerticalStrut(8));}
+        jButton1 = UITheme.button("Save",   UITheme.ACCENT);
+        jButton2 = UITheme.button("Delete", UITheme.DANGER);
+        jButton3 = UITheme.button("Clear",  UITheme.MUTED);
+        jButton4 = UITheme.button("Report", UITheme.PURPLE);
+        for(JButton b:new JButton[]{jButton1,jButton2,jButton3,jButton4}){b.setAlignmentX(LEFT_ALIGNMENT);b.setMaximumSize(new Dimension(Integer.MAX_VALUE,36));form.add(b);form.add(Box.createVerticalStrut(8));}
 
         jButton1.addActionListener(e -> {
-            try {
-                pst = con.prepareStatement("SELECT * FROM STUDENT WHERE STUDENTID=?");
-                pst.setString(1,txtno.getText()); rs=pst.executeQuery();
-                if(rs.next()){txtstname.setText(rs.getString("STNAME")); txtclass.addItem(rs.getString("CLASS"));}
-                else{JOptionPane.showMessageDialog(this,"Student not found."); txtstname.setText("");}
-            }catch(SQLException ex){Logger.getLogger(marks.class.getName()).log(Level.SEVERE,null,ex);}
-        });
-        jButton3.addActionListener(e -> {
             try {
                 pst = con.prepareStatement("INSERT INTO MARKS(STID,STNAME,CLASS,SUBJECT,MARKS) VALUES(?,?,?,?,?)");
                 pst.setString(1,txtno.getText()); pst.setString(2,txtstname.getText());
                 pst.setString(3,txtclass.getSelectedItem()!=null?txtclass.getSelectedItem().toString():"");
                 pst.setString(4,txtsubject.getSelectedItem()!=null?txtsubject.getSelectedItem().toString():"");
                 pst.setString(5,txtmarks.getText());
-                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"✅ Marks saved."); Marks_Load();
+                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"Marks added."); Marks_Load(); clearForm();
             }catch(SQLException ex){Logger.getLogger(marks.class.getName()).log(Level.SEVERE,null,ex);}
         });
         jButton4.addActionListener(e -> printReport());
-        jButton2.addActionListener(e -> { txtno.setText(""); txtstname.setText(""); txtmarks.setText(""); txtno.requestFocus(); });
+        jButton3.addActionListener(e -> { txtno.setText(""); txtstname.setText(""); txtmarks.setText(""); txtno.requestFocus(); });
 
         // Table
         markstable = new JTable(new DefaultTableModel(new Object[][]{},new String[]{"ID","Stu.ID","Name","Class","Subject","Marks"}){public boolean isCellEditable(int r,int c){return false;}});
@@ -140,6 +129,14 @@ public class marks extends JFrame {
     }
 
     private JComboBox<String> addC(JPanel p,String label,String[]items){JLabel l=UITheme.mutedLabel(label);l.setAlignmentX(LEFT_ALIGNMENT);JComboBox<String>c=UITheme.comboBox(items);c.setMaximumSize(new Dimension(Integer.MAX_VALUE,34));c.setAlignmentX(LEFT_ALIGNMENT);p.add(l);p.add(Box.createVerticalStrut(3));p.add(c);p.add(Box.createVerticalStrut(10));return c;}
+
+    private void clearForm() {
+        txtno.setText(""); txtstname.setText(""); txtmarks.setText("");
+        if(txtclass.getItemCount()>0) txtclass.setSelectedIndex(0);
+        if(txtsubject.getItemCount()>0) txtsubject.setSelectedIndex(0);
+        if(txtterm.getItemCount()>0) txtterm.setSelectedIndex(0);
+        jButton1.setEnabled(true); txtno.requestFocus();
+    }
 
     public static void main(String[] args){SwingUtilities.invokeLater(()->new marks().setVisible(true));}
 }

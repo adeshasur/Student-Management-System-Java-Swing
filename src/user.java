@@ -20,7 +20,7 @@ public class user extends JFrame {
     private JComboBox<String> txtUtype;
     private JTable   jTable1;
     private JScrollPane jScrollPane1;
-    private JButton  save, edit, jButton3, jButton4, jButton5;
+    private JButton  save, edit, jButton3, jButton4;
 
     public user() {
         UITheme.applyGlobalDefaults();
@@ -45,16 +45,15 @@ public class user extends JFrame {
     }
 
     private void buildUI() {
-        setTitle("Users — EduManage"); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setSize(1100, 600); setLocationRelativeTo(null);
+        setTitle("Users - EduManage"); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setSize(1100, 600); setLocationRelativeTo(null);
         JPanel root = new JPanel(new BorderLayout()); root.setBackground(UITheme.BG); setContentPane(root);
 
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(UITheme.SURFACE);
         header.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0,0,1,0,UITheme.BORDER),new EmptyBorder(14,24,14,24)));
         header.setPreferredSize(new Dimension(0,60));
-        header.add(UITheme.label("👤  User Management",18f,true),BorderLayout.WEST);
-        jButton5 = UITheme.button("✕  Close",UITheme.MUTED); jButton5.addActionListener(e->dispose());
-        header.add(jButton5,BorderLayout.EAST); root.add(header,BorderLayout.NORTH);
+        header.add(UITheme.label("User Management",18f,true),BorderLayout.WEST);
+        root.add(header,BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20,0)); body.setBackground(UITheme.BG); body.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -77,10 +76,10 @@ public class user extends JFrame {
         txtUtype=UITheme.comboBox(new String[]{"Admin","Teacher"}); txtUtype.setMaximumSize(new Dimension(Integer.MAX_VALUE,34)); txtUtype.setAlignmentX(LEFT_ALIGNMENT);
         form.add(txtUtype); form.add(Box.createVerticalStrut(20));
 
-        save     = UITheme.button("💾 Save",   UITheme.ACCENT);
-        edit     = UITheme.button("✏ Edit",    UITheme.WARNING);
-        jButton3 = UITheme.button("🗑 Delete",  UITheme.DANGER);
-        jButton4 = UITheme.button("✕ Clear",   UITheme.MUTED);
+        save     = UITheme.button("Save",   UITheme.ACCENT);
+        edit     = UITheme.button("Edit",    UITheme.WARNING);
+        jButton3 = UITheme.button("Delete",  UITheme.DANGER);
+        jButton4 = UITheme.button("Clear",   UITheme.MUTED);
         for(JButton b:new JButton[]{save,edit,jButton3,jButton4}){b.setAlignmentX(LEFT_ALIGNMENT);b.setMaximumSize(new Dimension(Integer.MAX_VALUE,36));form.add(b);form.add(Box.createVerticalStrut(8));}
 
         save.addActionListener(e -> saveActionPerformed());
@@ -112,7 +111,7 @@ public class user extends JFrame {
             pst.setString(1,txtName.getText()); pst.setString(2,txtPhone.getText()); pst.setString(3,txtAddress.getText());
             pst.setString(4,txtUname.getText()); pst.setString(5,new String(txtPwd.getPassword()));
             pst.setString(6,txtUtype.getSelectedItem().toString()); pst.executeUpdate();
-            JOptionPane.showMessageDialog(this,"✅ User added."); clearForm(); User_Load();
+            JOptionPane.showMessageDialog(this,"User added."); clearForm(); User_Load();
         } catch(SQLException ex){Logger.getLogger(user.class.getName()).log(Level.SEVERE,null,ex);}
     }
 
@@ -123,7 +122,7 @@ public class user extends JFrame {
             pst.setString(1,txtName.getText()); pst.setString(2,txtPhone.getText()); pst.setString(3,txtAddress.getText());
             pst.setString(4,txtUname.getText()); pst.setString(5,new String(txtPwd.getPassword()));
             pst.setString(6,txtUtype.getSelectedItem().toString()); pst.setInt(7,Integer.parseInt(d.getValueAt(row,0).toString()));
-            pst.executeUpdate(); JOptionPane.showMessageDialog(this,"✏ User updated."); clearForm(); User_Load(); save.setEnabled(true);
+            pst.executeUpdate(); JOptionPane.showMessageDialog(this,"User updated."); clearForm(); User_Load(); save.setEnabled(true);
         } catch(SQLException ex){Logger.getLogger(user.class.getName()).log(Level.SEVERE,null,ex);}
     }
 
@@ -131,7 +130,7 @@ public class user extends JFrame {
         int row=jTable1.getSelectedRow(); if(row==-1){JOptionPane.showMessageDialog(this,"Select a user.");return;}
         try{
             pst=con.prepareStatement("DELETE FROM USERS WHERE ID=?"); pst.setInt(1,Integer.parseInt(d.getValueAt(row,0).toString()));
-            pst.executeUpdate(); JOptionPane.showMessageDialog(this,"🗑 User deleted."); clearForm(); User_Load(); save.setEnabled(true);
+            pst.executeUpdate(); JOptionPane.showMessageDialog(this,"User deleted."); clearForm(); User_Load(); save.setEnabled(true);
         }catch(SQLException ex){Logger.getLogger(user.class.getName()).log(Level.SEVERE,null,ex);}
     }
 

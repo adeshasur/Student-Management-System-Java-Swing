@@ -126,7 +126,7 @@ public class login extends JFrame {
         left.setBorder(new EmptyBorder(80, 50, 60, 50));
 
         // Logo circle
-        JLabel logo = new JLabel("🎓", SwingConstants.CENTER) {
+        JLabel logo = new JLabel("", SwingConstants.CENTER) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -158,7 +158,7 @@ public class login extends JFrame {
         left.add(Box.createVerticalStrut(48));
 
         // Feature bullets
-        String[] features = {"📊  Live grade tracking", "👩‍🏫  Teacher dashboard", "📋  Exam & marks management"};
+        String[] features = {"Live grade tracking", "Teacher dashboard", "Exam & marks management"};
         for (String f : features) {
             JLabel fl = UITheme.mutedLabel(f);
             fl.setForeground(new Color(0x90A0BE));

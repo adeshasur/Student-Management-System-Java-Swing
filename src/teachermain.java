@@ -49,7 +49,7 @@ public class teachermain extends JFrame {
         sb.setLayout(new BoxLayout(sb, BoxLayout.Y_AXIS));
         sb.setBorder(new MatteBorder(0, 0, 0, 1, UITheme.BORDER));
 
-        JLabel logo = new JLabel("🎓 EduManage");
+        JLabel logo = new JLabel("EduManage");
         logo.setFont(UITheme.fontBold(16f));
         logo.setForeground(UITheme.ACCENT);
         logo.setBorder(new EmptyBorder(24, 20, 24, 20));
@@ -63,8 +63,8 @@ public class teachermain extends JFrame {
         sb.add(Box.createVerticalStrut(8));
         sb.add(UITheme.sectionHeader("TEACHER MENU"));
 
-        btnstudent1 = UITheme.navButton("🎓", "Students");
-        btnmarks    = UITheme.navButton("📊", "Marks");
+        btnstudent1 = UITheme.navButton("", "Students");
+        btnmarks    = UITheme.navButton("", "Marks");
 
         for (JButton b : new JButton[]{btnstudent1, btnmarks}) {
             b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -79,13 +79,10 @@ public class teachermain extends JFrame {
         sep2.setForeground(UITheme.BORDER);
         sb.add(sep2);
 
-        jButton5 = UITheme.button("⏻  Logout", UITheme.DANGER);
+        jButton5 = UITheme.button("Logout", UITheme.DANGER);
         jButton5.setAlignmentX(Component.CENTER_ALIGNMENT);
         jButton5.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
-        jButton5.setBackground(new Color(0x2D1B1B));
-        jButton5.setForeground(UITheme.DANGER);
-        jButton5.setContentAreaFilled(false);
-        jButton5.setOpaque(true);
+        jButton5.setOpaque(false); // Changed to false for better button look
         sb.add(jButton5);
         sb.add(Box.createVerticalStrut(16));
 
@@ -166,15 +163,15 @@ public class teachermain extends JFrame {
         grid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 130));
         grid.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        grid.add(quickCard("🎓", "Students", "Add and view student records", e -> new student().setVisible(true)));
-        grid.add(quickCard("📊", "Marks",    "Enter and manage student marks",  e -> new marks().setVisible(true)));
+        grid.add(quickCard("", "Students", "Add and view student records", e -> new student().setVisible(true)));
+        grid.add(quickCard("", "Marks",    "Enter and manage student marks",  e -> new marks().setVisible(true)));
 
         body.add(grid);
         content.add(body, BorderLayout.CENTER);
         return content;
     }
 
-    private JPanel quickCard(String icon, String title, String sub, ActionListener action) {
+    private JPanel quickCard(String ignore, String title, String sub, ActionListener action) {
         JPanel p = new JPanel(new BorderLayout(12, 0)) {
             boolean hovered = false;
             { addMouseListener(new MouseAdapter() {
@@ -183,22 +180,16 @@ public class teachermain extends JFrame {
                 public void mouseClicked(MouseEvent e) { action.actionPerformed(null); }
             }); }
             @Override protected void paintComponent(Graphics g) {
-                Graphics2D g2=(Graphics2D)g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(hovered?new Color(0x252840):UITheme.CARD);
-                g2.fillRoundRect(0,0,getWidth(),getHeight(),14,14);
-                if(hovered){g2.setColor(UITheme.PURPLE);g2.setStroke(new BasicStroke(1.5f));g2.drawRoundRect(1,1,getWidth()-2,getHeight()-2,14,14);}
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(hovered ? new Color(0x1F232D) : UITheme.CARD);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
+                g2.setColor(UITheme.ACCENT);
+                g2.fillRoundRect(0, 0, 8, getHeight(), 16, 0); // Side indicator
                 g2.dispose();
             }
         };
         p.setOpaque(false);
-        p.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        JLabel ic = new JLabel(icon);
-        ic.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 30));
-        ic.setPreferredSize(new Dimension(44, 44));
-        ic.setHorizontalAlignment(SwingConstants.CENTER);
-
         JLabel tl = UITheme.label(title, 15f, true);
         JLabel sl = UITheme.mutedLabel(sub); sl.setFont(UITheme.fontPlain(11f));
 

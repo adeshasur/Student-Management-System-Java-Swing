@@ -18,7 +18,7 @@ public class teacher extends JFrame {
     private JTextField txtname, txtqual, txtsal, txtphone, txtemail, txtaddress;
     private JTable   teachertable;
     private JScrollPane jScrollPane1;
-    private JButton  btnsave, jButton3, edit, jButton2;
+    private JButton  btnsave, jButton3, edit;
 
     public teacher() { this(0,""); }
     public teacher(int iid, String usertype) {
@@ -50,9 +50,8 @@ public class teacher extends JFrame {
         header.setBackground(UITheme.SURFACE);
         header.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0,0,1,0,UITheme.BORDER),new EmptyBorder(14,24,14,24)));
         header.setPreferredSize(new Dimension(0,60));
-        header.add(UITheme.label("👩‍🏫  Teacher Management",18f,true),BorderLayout.WEST);
-        jButton2 = UITheme.button("✕  Close",UITheme.MUTED); jButton2.addActionListener(e->dispose());
-        header.add(jButton2,BorderLayout.EAST); root.add(header,BorderLayout.NORTH);
+        header.add(UITheme.label("Teacher Management",18f,true),BorderLayout.WEST);
+        root.add(header,BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20,0)); body.setBackground(UITheme.BG); body.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -70,9 +69,9 @@ public class teacher extends JFrame {
         txtaddress = addF(form,"Address");
         form.add(Box.createVerticalStrut(16));
 
-        btnsave  = UITheme.button("💾 Save",UITheme.ACCENT);
-        jButton3 = UITheme.button("🗑 Delete",UITheme.DANGER);
-        edit     = UITheme.button("✏ Edit",UITheme.WARNING);
+        btnsave  = UITheme.button("Save",UITheme.ACCENT);
+        jButton3 = UITheme.button("Delete",UITheme.DANGER);
+        edit     = UITheme.button("Edit",UITheme.WARNING);
         for(JButton b:new JButton[]{btnsave,jButton3,edit}){b.setAlignmentX(LEFT_ALIGNMENT);b.setMaximumSize(new Dimension(Integer.MAX_VALUE,36));form.add(b);form.add(Box.createVerticalStrut(8));}
 
         btnsave.addActionListener(e -> {
@@ -83,12 +82,12 @@ public class teacher extends JFrame {
                 pst.setString(3,txtaddress.getText());
                 pst.setString(4,txtname.getText().split(" ")[0]); // username = first name
                 pst.setString(5,"1234"); pst.setString(6,"Teacher");
-                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"✅ Teacher added."); Teacher_Load(); clearForm();
+                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"Teacher added."); Teacher_Load(); clearForm();
             } catch(SQLException ex){Logger.getLogger(teacher.class.getName()).log(Level.SEVERE,null,ex);}
         });
         jButton3.addActionListener(e -> {
             int row=teachertable.getSelectedRow(); if(row==-1){JOptionPane.showMessageDialog(this,"Select a teacher.");return;}
-            try{pst=con.prepareStatement("DELETE FROM USERS WHERE ID=?"); pst.setString(1,d.getValueAt(row,0).toString()); pst.executeUpdate(); JOptionPane.showMessageDialog(this,"🗑 Teacher deleted."); Teacher_Load(); btnsave.setEnabled(true);}
+            try{pst=con.prepareStatement("DELETE FROM USERS WHERE ID=?"); pst.setString(1,d.getValueAt(row,0).toString()); pst.executeUpdate(); JOptionPane.showMessageDialog(this,"Teacher deleted."); Teacher_Load(); btnsave.setEnabled(true);}
             catch(SQLException ex){Logger.getLogger(teacher.class.getName()).log(Level.SEVERE,null,ex);}
         });
         edit.addActionListener(e -> {
@@ -97,7 +96,7 @@ public class teacher extends JFrame {
                 pst=con.prepareStatement("UPDATE USERS SET NAME=?,PHONE=?,ADDRESS=? WHERE ID=?");
                 pst.setString(1,txtname.getText()); pst.setString(2,txtphone.getText()); pst.setString(3,txtaddress.getText());
                 pst.setString(4,d.getValueAt(row,0).toString()); pst.executeUpdate();
-                JOptionPane.showMessageDialog(this,"✏ Teacher updated."); Teacher_Load(); btnsave.setEnabled(true);
+                JOptionPane.showMessageDialog(this,"Teacher updated."); Teacher_Load(); btnsave.setEnabled(true);
             }catch(SQLException ex){Logger.getLogger(teacher.class.getName()).log(Level.SEVERE,null,ex);}
         });
 

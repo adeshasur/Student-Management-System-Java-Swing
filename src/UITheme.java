@@ -11,19 +11,19 @@ import javax.swing.table.*;
 public class UITheme {
 
     // ─── Palette ───────────────────────────────────────────────────────────
-    public static final Color BG          = new Color(0x0F1117);
-    public static final Color SURFACE     = new Color(0x1A1D2E);
-    public static final Color SIDEBAR     = new Color(0x141624);
-    public static final Color CARD        = new Color(0x1E2235);
-    public static final Color ACCENT      = new Color(0x4F8EF7);
-    public static final Color ACCENT_DARK = new Color(0x3A6FD8);
-    public static final Color PURPLE      = new Color(0x7C5CBF);
-    public static final Color SUCCESS     = new Color(0x2ECC71);
-    public static final Color WARNING     = new Color(0xF39C12);
-    public static final Color DANGER      = new Color(0xE74C3C);
-    public static final Color MUTED       = new Color(0x4A5568);
-    public static final Color TEXT        = new Color(0xEAEAEA);
-    public static final Color TEXT_MUTED  = new Color(0x7F8C99);
+    public static final Color BG          = new Color(0x0B0D11); // Deeper black
+    public static final Color SURFACE     = new Color(0x13161C); // Richer slate surface
+    public static final Color SIDEBAR     = new Color(0x0E1116);
+    public static final Color CARD        = new Color(0x191D24);
+    public static final Color ACCENT      = new Color(0x4078D1); // More professional blue
+    public static final Color ACCENT_DARK = new Color(0x2D5AA3);
+    public static final Color PURPLE      = new Color(0x6A52AD);
+    public static final Color SUCCESS     = new Color(0x27AE60);
+    public static final Color WARNING     = new Color(0xE67E22);
+    public static final Color DANGER      = new Color(0xC0392B);
+    public static final Color MUTED       = new Color(0x3B4354);
+    public static final Color TEXT        = new Color(0xF0F0F0);
+    public static final Color TEXT_MUTED  = new Color(0x8C9AB2);
     public static final Color BORDER      = new Color(0x2D3150);
     public static final Color ROW_ALT     = new Color(0x1A1D2E);
     public static final Color ROW_SEL     = new Color(0x2A3A5E);
@@ -74,17 +74,16 @@ public class UITheme {
                 Color c = getModel().isPressed()  ? bg.darker() :
                           getModel().isRollover() ? bg.brighter() : bg;
                 g2.setColor(c);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
         b.setFont(fontBold(13f));
         b.setForeground(Color.WHITE);
-        b.setBackground(bg);
         b.setContentAreaFilled(false);
         b.setOpaque(false);
-        b.setBorder(new EmptyBorder(8, 18, 8, 18));
+        b.setBorder(new EmptyBorder(10, 20, 10, 20));
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         b.setFocusPainted(false);
         return b;
@@ -92,20 +91,21 @@ public class UITheme {
 
     // ─── Sidebar nav button ────────────────────────────────────────────────
     public static JButton navButton(String icon, String label) {
-        JButton b = new JButton(icon + "  " + label);
+        String text = (icon == null || icon.isEmpty()) ? label : icon + "  " + label;
+        JButton b = new JButton(text);
         b.setFont(fontPlain(14f));
         b.setForeground(TEXT_MUTED);
         b.setBackground(SIDEBAR);
         b.setContentAreaFilled(false);
         b.setOpaque(true);
-        b.setBorder(new EmptyBorder(12, 20, 12, 20));
+        b.setBorder(new EmptyBorder(12, 24, 12, 20));
         b.setHorizontalAlignment(SwingConstants.LEFT);
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         b.setFocusPainted(false);
         b.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 b.setForeground(TEXT);
-                b.setBackground(new Color(0x252840));
+                b.setBackground(new Color(0x1F232D));
             }
             public void mouseExited(java.awt.event.MouseEvent e) {
                 b.setForeground(TEXT_MUTED);
@@ -245,7 +245,7 @@ public class UITheme {
     }
 
     // ─── Stat card ─────────────────────────────────────────────────────────
-    public static JPanel statCard(String title, String value, String icon, Color accent) {
+    public static JPanel statCard(String title, String value, String ignore, Color accent) {
         JPanel p = new JPanel(new BorderLayout(0, 8)) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -253,33 +253,23 @@ public class UITheme {
                 g2.setColor(CARD);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
                 g2.setColor(accent);
-                g2.setStroke(new BasicStroke(3f));
-                g2.drawRoundRect(1, 1, getWidth()-2, getHeight()-2, 16, 16);
+                g2.fillRoundRect(0, 0, 6, getHeight(), 16, 0); // Side indicator
                 g2.dispose();
             }
         };
         p.setOpaque(false);
-        p.setBorder(new EmptyBorder(20, 20, 20, 20));
+        p.setBorder(new EmptyBorder(20, 24, 20, 24));
 
-        JLabel iconLabel = new JLabel(icon);
-        iconLabel.setFont(fontPlain(28f));
-        iconLabel.setForeground(accent);
-
-        JLabel valLabel = new JLabel(value);
-        valLabel.setFont(fontBold(28f));
-        valLabel.setForeground(TEXT);
-
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(fontPlain(12f));
+        JLabel titleLabel = new JLabel(title.toUpperCase());
+        titleLabel.setFont(UITheme.fontBold(10f));
         titleLabel.setForeground(TEXT_MUTED);
 
-        JPanel textPanel = new JPanel(new GridLayout(2, 1, 0, 2));
-        textPanel.setOpaque(false);
-        textPanel.add(valLabel);
-        textPanel.add(titleLabel);
+        JLabel valLabel = new JLabel(value);
+        valLabel.setFont(UITheme.fontBold(26f));
+        valLabel.setForeground(Color.WHITE);
 
-        p.add(iconLabel, BorderLayout.WEST);
-        p.add(textPanel, BorderLayout.CENTER);
+        p.add(titleLabel, BorderLayout.NORTH);
+        p.add(valLabel, BorderLayout.CENTER);
         return p;
     }
 }

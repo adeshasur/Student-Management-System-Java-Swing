@@ -18,7 +18,7 @@ public class subject extends JFrame {
     private JTextField txtsubject;
     private JTable subjecttable;
     private JScrollPane jScrollPane1;
-    private JButton btnsave, jButton3, jButton4, jButton1;
+    private JButton btnsave, jButton3, jButton4;
 
     public subject() {
         UITheme.applyGlobalDefaults();
@@ -61,10 +61,7 @@ public class subject extends JFrame {
         header.setBorder(BorderFactory.createCompoundBorder(
             new MatteBorder(0,0,1,0,UITheme.BORDER), new EmptyBorder(14,24,14,24)));
         header.setPreferredSize(new Dimension(0,60));
-        header.add(UITheme.label("📚  Subject Management", 18f, true), BorderLayout.WEST);
-        jButton1 = UITheme.button("✕  Close", UITheme.MUTED);
-        jButton1.addActionListener(e -> dispose());
-        header.add(jButton1, BorderLayout.EAST);
+        header.add(UITheme.label("Subject Management", 18f, true), BorderLayout.WEST);
         root.add(header, BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20, 0));
@@ -89,9 +86,9 @@ public class subject extends JFrame {
         txtsubject.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34)); txtsubject.setAlignmentX(LEFT_ALIGNMENT);
         form.add(txtsubject); form.add(Box.createVerticalStrut(20));
 
-        btnsave  = UITheme.button("💾 Save",   UITheme.ACCENT);
-        jButton3 = UITheme.button("🗑 Delete",  UITheme.DANGER);
-        jButton4 = UITheme.button("✕ Clear",   UITheme.MUTED);
+        btnsave  = UITheme.button("Save",   UITheme.ACCENT);
+        jButton3 = UITheme.button("Delete",  UITheme.DANGER);
+        jButton4 = UITheme.button("Clear",   UITheme.MUTED);
 
         for (JButton b : new JButton[]{btnsave, jButton3, jButton4}) {
             b.setAlignmentX(LEFT_ALIGNMENT);
@@ -105,7 +102,7 @@ public class subject extends JFrame {
             try {
                 pst = con.prepareStatement("INSERT INTO SUBJECT(SUBJECTNAME) VALUES(?)");
                 pst.setString(1, sub); pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "✅ Subject added.");
+                JOptionPane.showMessageDialog(this, "Subject added.");
                 txtsubject.setText(""); Subject_Load(); txtsubject.requestFocus();
             } catch (SQLException ex) { Logger.getLogger(subject.class.getName()).log(Level.SEVERE, null, ex); }
         });
@@ -115,7 +112,7 @@ public class subject extends JFrame {
             try {
                 pst = con.prepareStatement("DELETE FROM SUBJECT WHERE SID=?");
                 pst.setString(1, d.getValueAt(row, 0).toString()); pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "🗑 Subject deleted.");
+                JOptionPane.showMessageDialog(this, "Subject deleted.");
                 txtsubject.setText(""); Subject_Load(); btnsave.setEnabled(true);
             } catch (SQLException ex) { Logger.getLogger(subject.class.getName()).log(Level.SEVERE, null, ex); }
         });

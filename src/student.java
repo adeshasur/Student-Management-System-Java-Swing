@@ -24,7 +24,7 @@ public class student extends JFrame {
     private JComboBox<String> txtgender, txtclass, txtsection;
     private JTable       studenttable;
     private JScrollPane  jScrollPane1;
-    private JButton      btnsave, jButton3 /*delete*/, edit, jButton4 /*clear*/, jButton1 /*close*/;
+    private JButton      btnsave, jButton3 /*delete*/, edit, jButton4 /*clear*/;
     private JTextField   searchField;
 
     public student() {
@@ -98,12 +98,8 @@ public class student extends JFrame {
             new EmptyBorder(14, 24, 14, 24)));
         header.setPreferredSize(new Dimension(0, 60));
 
-        JLabel title = UITheme.label("🎓  Student Registration", 18f, true);
-        jButton1 = UITheme.button("✕  Close", UITheme.MUTED);
-        jButton1.addActionListener(e -> dispose());
-
+        JLabel title = UITheme.label("Student Registration", 18f, true);
         header.add(title, BorderLayout.WEST);
-        header.add(jButton1, BorderLayout.EAST);
         root.add(header, BorderLayout.NORTH);
 
         // ── Body ──
@@ -142,10 +138,10 @@ public class student extends JFrame {
         wrap.add(Box.createVerticalStrut(20));
 
         // Buttons
-        btnsave  = UITheme.button("💾 Save",   UITheme.ACCENT);
-        jButton3 = UITheme.button("🗑 Delete",  UITheme.DANGER);
-        edit     = UITheme.button("✏ Edit",     UITheme.WARNING);
-        jButton4 = UITheme.button("✕ Clear",    UITheme.MUTED);
+        btnsave  = UITheme.button("Save",   UITheme.ACCENT);
+        jButton3 = UITheme.button("Delete",  UITheme.DANGER);
+        edit     = UITheme.button("Edit",     UITheme.WARNING);
+        jButton4 = UITheme.button("Clear",    UITheme.MUTED);
 
         for (JButton b : new JButton[]{btnsave, jButton3, edit, jButton4}) {
             b.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -167,7 +163,7 @@ public class student extends JFrame {
         panel.setBackground(UITheme.BG);
 
         // Search bar
-        searchField = UITheme.textField("🔍  Search students...");
+        searchField = UITheme.textField("Search students...");
         searchField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         searchField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) { filterTable(searchField.getText()); }
@@ -233,7 +229,7 @@ public class student extends JFrame {
             pst.setString(7, txtclass.getSelectedItem() != null ? txtclass.getSelectedItem().toString() : "");
             pst.setString(8, txtsection.getSelectedItem() != null ? txtsection.getSelectedItem().toString() : "");
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "✅  Student added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Student added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             clearForm(); Student_Load();
         } catch (SQLException ex) {
             Logger.getLogger(student.class.getName()).log(Level.SEVERE, null, ex);

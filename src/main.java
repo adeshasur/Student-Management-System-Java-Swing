@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.util.logging.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -19,7 +19,7 @@ public class main extends JFrame {
 
     // Sidebar nav buttons
     private JButton btnstudent, btnclass, btnexam, btnsubject, btnuser, btnteacher;
-    private JButton jButton5; // logout
+    private JButton btnLogout;
 
     // Header labels
     private JLabel jLabel1, jLabel2; // username, usertype
@@ -63,7 +63,7 @@ public class main extends JFrame {
         sb.setBorder(new MatteBorder(0, 0, 0, 1, UITheme.BORDER));
 
         // Logo area
-        JLabel logo = new JLabel("🎓 EduManage");
+        JLabel logo = new JLabel("EduManage");
         logo.setFont(UITheme.fontBold(16f));
         logo.setForeground(UITheme.ACCENT);
         logo.setBorder(new EmptyBorder(24, 20, 24, 20));
@@ -80,16 +80,16 @@ public class main extends JFrame {
         sb.add(UITheme.sectionHeader("MAIN MENU"));
 
         // Nav buttons
-        btnstudent = UITheme.navButton("🎓", "Students");
-        btnclass   = UITheme.navButton("🏫", "Classes");
-        btnsubject = UITheme.navButton("📚", "Subjects");
-        btnteacher = UITheme.navButton("👩‍🏫", "Teachers");
-        btnexam    = UITheme.navButton("📝", "Exams");
+        btnstudent = UITheme.navButton("", "Students");
+        btnclass   = UITheme.navButton("", "Classes");
+        btnsubject = UITheme.navButton("", "Subjects");
+        btnteacher = UITheme.navButton("", "Teachers");
+        btnexam    = UITheme.navButton("", "Exams");
 
         sb.add(Box.createVerticalStrut(4));
         sb.add(UITheme.sectionHeader("MANAGEMENT"));
 
-        btnuser = UITheme.navButton("👤", "Users");
+        btnuser = UITheme.navButton("", "Users");
 
         for (JButton b : new JButton[]{btnstudent, btnclass, btnsubject, btnteacher, btnexam}) {
             b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -115,15 +115,11 @@ public class main extends JFrame {
         sb.add(sep2);
 
         // Logout
-        jButton5 = UITheme.button("⏻  Logout", UITheme.DANGER);
-        jButton5.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jButton5.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
-        jButton5.setBorder(new EmptyBorder(10, 20, 10, 20));
-        jButton5.setContentAreaFilled(false);
-        jButton5.setOpaque(true);
-        jButton5.setBackground(new Color(0x2D1B1B));
-        jButton5.setForeground(UITheme.DANGER);
-        sb.add(jButton5);
+        btnLogout = UITheme.button("Logout", UITheme.DANGER);
+        btnLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnLogout.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
+        btnLogout.setOpaque(false);
+        sb.add(btnLogout);
         sb.add(Box.createVerticalStrut(16));
 
         // Wire actions
@@ -133,7 +129,7 @@ public class main extends JFrame {
         btnteacher.addActionListener(e -> new teacher().setVisible(true));
         btnexam.addActionListener(e    -> new exam().setVisible(true));
         btnuser.addActionListener(e    -> new user().setVisible(true));
-        jButton5.addActionListener(e   -> logout());
+        btnLogout.addActionListener(e  -> logout());
 
         return sb;
     }
@@ -244,48 +240,36 @@ public class main extends JFrame {
         statClasses  = new JLabel("--");
         statSubjects = new JLabel("--");
 
-        p.add(buildStatCard("Total Students",  statStudents, "🎓", UITheme.ACCENT));
-        p.add(buildStatCard("Teachers",        statTeachers, "👩‍🏫", UITheme.PURPLE));
-        p.add(buildStatCard("Classes",         statClasses,  "🏫", UITheme.SUCCESS));
-        p.add(buildStatCard("Subjects",        statSubjects, "📚", UITheme.WARNING));
+        p.add(buildStatCard("Total Students",  statStudents, "", UITheme.ACCENT));
+        p.add(buildStatCard("Teachers",        statTeachers, "", UITheme.PURPLE));
+        p.add(buildStatCard("Classes",         statClasses,  "", UITheme.SUCCESS));
+        p.add(buildStatCard("Subjects",        statSubjects, "", UITheme.WARNING));
         return p;
     }
 
-    private JPanel buildStatCard(String title, JLabel valLabel, String icon, Color accent) {
-        JPanel p = new JPanel(new BorderLayout(14, 0)) {
+    private JPanel buildStatCard(String title, JLabel value, String ignore, Color accent) {
+        JPanel p = new JPanel(new BorderLayout(0, 8)) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(UITheme.CARD);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
                 g2.setColor(accent);
-                g2.setStroke(new BasicStroke(2f));
-                g2.drawRoundRect(1, 1, getWidth()-2, getHeight()-2, 14, 14);
+                g2.fillRoundRect(0, 0, 6, getHeight(), 16, 0); // Side indicator
                 g2.dispose();
             }
         };
         p.setOpaque(false);
-        p.setBorder(new EmptyBorder(18, 18, 18, 18));
+        p.setBorder(new EmptyBorder(20, 24, 20, 24));
 
-        JLabel iconLabel = new JLabel(icon);
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 30));
-        iconLabel.setForeground(accent);
-        iconLabel.setPreferredSize(new Dimension(44, 44));
-        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel tl = UITheme.mutedLabel(title.toUpperCase());
+        tl.setFont(UITheme.fontBold(10f));
 
-        valLabel.setFont(UITheme.fontBold(26f));
-        valLabel.setForeground(UITheme.TEXT);
+        value.setFont(UITheme.fontBold(24f));
+        value.setForeground(Color.WHITE);
 
-        JLabel titleLbl = UITheme.mutedLabel(title);
-        titleLbl.setFont(UITheme.fontPlain(12f));
-
-        JPanel right = new JPanel(new GridLayout(2, 1, 0, 2));
-        right.setOpaque(false);
-        right.add(valLabel);
-        right.add(titleLbl);
-
-        p.add(iconLabel, BorderLayout.WEST);
-        p.add(right, BorderLayout.CENTER);
+        p.add(tl, BorderLayout.NORTH);
+        p.add(value, BorderLayout.CENTER);
         return p;
     }
 
@@ -295,12 +279,12 @@ public class main extends JFrame {
         grid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
 
         String[][] items = {
-            {"🎓", "Students",  "Add, edit or view students"},
-            {"🏫", "Classes",   "Manage class groups"},
-            {"📚", "Subjects",  "Curriculum subjects"},
-            {"👩‍🏫","Teachers",  "Staff management"},
-            {"📝", "Exams",     "Schedule & track exams"},
-            {"👤", "Users",     "User accounts & access"},
+            {"", "Students",  "Add, edit or view students"},
+            {"", "Classes",   "Manage class groups"},
+            {"", "Subjects",  "Curriculum subjects"},
+            {"","Teachers",  "Staff management"},
+            {"", "Exams",     "Schedule & track exams"},
+            {"", "Users",     "User accounts & access"},
         };
         ActionListener[] acts = {
             e -> new student().setVisible(true),
@@ -331,12 +315,12 @@ public class main extends JFrame {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(hovered ? new Color(0x252840) : UITheme.CARD);
+                g2.setColor(hovered ? new Color(0x1F232D) : UITheme.CARD);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
                 if (hovered) {
                     g2.setColor(UITheme.ACCENT);
-                    g2.setStroke(new BasicStroke(1.5f));
-                    g2.drawRoundRect(1, 1, getWidth()-2, getHeight()-2, 14, 14);
+                    g2.setStroke(new BasicStroke(1.2f));
+                    g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 14, 14);
                 }
                 g2.dispose();
             }

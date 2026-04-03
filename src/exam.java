@@ -19,7 +19,7 @@ public class exam extends JFrame {
     private JTextField   txtdate_str; // plain text date
     private JTable       examtable;
     private JScrollPane  jScrollPane1;
-    private JButton      jButton1, jButton2, btncreate, jButton4;
+    private JButton      jButton1, jButton2, btncreate;
 
     public exam() {
         UITheme.applyGlobalDefaults();
@@ -65,9 +65,8 @@ public class exam extends JFrame {
         header.setBackground(UITheme.SURFACE);
         header.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0,0,1,0,UITheme.BORDER),new EmptyBorder(14,24,14,24)));
         header.setPreferredSize(new Dimension(0,60));
-        header.add(UITheme.label("📝  Exam Management",18f,true),BorderLayout.WEST);
-        jButton4 = UITheme.button("✕  Close",UITheme.MUTED); jButton4.addActionListener(e -> dispose());
-        header.add(jButton4,BorderLayout.EAST); root.add(header,BorderLayout.NORTH);
+        header.add(UITheme.label("Exam Management",18f,true),BorderLayout.WEST);
+        root.add(header,BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20,0)); body.setBackground(UITheme.BG); body.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -92,19 +91,18 @@ public class exam extends JFrame {
 
         jButton1.addActionListener(e -> {
             try {
-                pst = con.prepareStatement("INSERT INTO EXAM(EXAMNAME,TERM,DATE,CLASS,SECTION,SUBJECT) VALUES(?,?,?,?,?,?)");
-                pst.setString(1,txtename.getText()); pst.setString(2,txtterm.getSelectedItem().toString());
-                pst.setString(3,txtdate_str.getText());
-                pst.setString(4,txtclass.getSelectedItem()!=null?txtclass.getSelectedItem().toString():"");
-                pst.setString(5,txtsection.getSelectedItem()!=null?txtsection.getSelectedItem().toString():"");
-                pst.setString(6,txtsubject.getSelectedItem()!=null?txtsubject.getSelectedItem().toString():"");
-                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"✅ Exam added."); Exam_Load();
+                pst = con.prepareStatement("INSERT INTO EXAM(EXAMNAME,DATE,CLASS,SECTION,SUBJECT) VALUES(?,?,?,?,?)");
+                pst.setString(1,txtename.getText());
+                pst.setString(2,txtdate_str.getText());
+                pst.setString(3,txtclass.getSelectedItem()!=null?txtclass.getSelectedItem().toString():"");
+                pst.setString(4,txtsection.getSelectedItem()!=null?txtsection.getSelectedItem().toString():"");
+                pst.setString(5,txtsubject.getSelectedItem()!=null?txtsubject.getSelectedItem().toString():"");
+                pst.executeUpdate(); JOptionPane.showMessageDialog(this,"Exam added."); Exam_Load();
             } catch(SQLException ex){Logger.getLogger(exam.class.getName()).log(Level.SEVERE,null,ex);}
         });
         jButton2.addActionListener(e -> {
-            int row=examtable.getSelectedRow(); if(row==-1){JOptionPane.showMessageDialog(this,"Select an exam.");return;}
-            try{pst=con.prepareStatement("DELETE FROM EXAM WHERE EXAMID=?"); pst.setString(1,d.getValueAt(row,0).toString()); pst.executeUpdate(); JOptionPane.showMessageDialog(this,"🗑 Exam deleted."); Exam_Load();}
-            catch(SQLException ex){Logger.getLogger(exam.class.getName()).log(Level.SEVERE,null,ex);}
+            int row=examtable.getSelectedRow();            if(row==-1){JOptionPane.showMessageDialog(this,"Select an exam.");return;}
+            try{pst=con.prepareStatement("DELETE FROM EXAM WHERE EID=?"); pst.setString(1,d.getValueAt(row,0).toString()); pst.executeUpdate(); JOptionPane.showMessageDialog(this,"Exam deleted."); Exam_Load(); jButton1.setEnabled(true);}catch(SQLException ex){Logger.getLogger(exam.class.getName()).log(Level.SEVERE,null,ex);}
         });
         btncreate.addActionListener(e -> { txtename.setText(""); txtdate_str.setText(""); jButton1.setEnabled(true); });
 

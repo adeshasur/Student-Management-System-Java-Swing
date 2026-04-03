@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.util.*;
 import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -18,7 +17,7 @@ public class classes extends JFrame {
     private JComboBox<String> txtclass, txtsection;
     private JTable classtable;
     private JScrollPane jScrollPane1;
-    private JButton btnsave, jButton2, btncreate, jButton3;
+    private JButton btnsave, jButton2, btncreate;
 
     public classes() {
         UITheme.applyGlobalDefaults();
@@ -57,10 +56,7 @@ public class classes extends JFrame {
         setContentPane(root);
 
         // Header
-        JPanel header = buildHeader("🏫  Class Management");
-        jButton3 = UITheme.button("✕  Close", UITheme.MUTED);
-        jButton3.addActionListener(e -> dispose());
-        header.add(jButton3, BorderLayout.EAST);
+        JPanel header = buildHeader("Class Management");
         root.add(header, BorderLayout.NORTH);
 
         JPanel body = new JPanel(new BorderLayout(20, 0));
@@ -87,9 +83,9 @@ public class classes extends JFrame {
         txtsection.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34)); txtsection.setAlignmentX(LEFT_ALIGNMENT);
         form.add(txtsection); form.add(Box.createVerticalStrut(24));
 
-        btnsave  = UITheme.button("💾 Save",   UITheme.ACCENT);
-        jButton2 = UITheme.button("🗑 Delete", UITheme.DANGER);
-        btncreate = UITheme.button("✕ Clear",  UITheme.MUTED);
+        btnsave  = UITheme.button("Save",   UITheme.ACCENT);
+        jButton2 = UITheme.button("Delete", UITheme.DANGER);
+        btncreate = UITheme.button("Clear",  UITheme.MUTED);
 
         for (JButton b : new JButton[]{btnsave, jButton2, btncreate}) {
             b.setAlignmentX(LEFT_ALIGNMENT);
@@ -103,7 +99,7 @@ public class classes extends JFrame {
                 pst.setString(1, txtclass.getSelectedItem().toString());
                 pst.setString(2, txtsection.getSelectedItem().toString());
                 pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "✅ Class added.");
+                JOptionPane.showMessageDialog(this, "Class added.");
                 Class_Load(); btnsave.setEnabled(true);
             } catch (SQLException ex) { Logger.getLogger(classes.class.getName()).log(Level.SEVERE, null, ex); }
         });
@@ -114,7 +110,7 @@ public class classes extends JFrame {
                 pst = con.prepareStatement("DELETE FROM CLASS WHERE CID=?");
                 pst.setString(1, d.getValueAt(row, 0).toString());
                 pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "🗑 Class deleted.");
+                JOptionPane.showMessageDialog(this, "Class deleted.");
                 Class_Load(); btnsave.setEnabled(true);
             } catch (SQLException ex) { Logger.getLogger(classes.class.getName()).log(Level.SEVERE, null, ex); }
         });
