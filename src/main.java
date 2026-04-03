@@ -366,8 +366,4 @@ public class main extends JFrame {
             new login();
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new main(0, "Admin", "Admin").setVisible(true));
-    }
 }
