@@ -6,13 +6,16 @@ A full-featured desktop **Student Management System** built with Java Swing, fea
 
 ## Screenshots
 
-> Login Screen
+### Login Screen
+
 ![Login Screen](src/images/login_screen.png)
 
-> Admin Dashboard
+### Admin Dashboard
+
 ![Admin Dashboard](src/images/admin_dashboard.png)
 
-> Student Management
+### Student Management
+
 ![Student Management](src/images/student_management.png)
 
 ---
@@ -20,7 +23,7 @@ A full-featured desktop **Student Management System** built with Java Swing, fea
 ## Features
 
 | Module | Description |
-|---|---|
+| --- | --- |
 | Authentication | Role-based login for Admin and Teacher users |
 | Student Management | Add, edit, delete, and search student records |
 | Teacher Management | Manage teacher profiles and assignments |
@@ -48,7 +51,7 @@ A full-featured desktop **Student Management System** built with Java Swing, fea
 
 The application uses an embedded **H2 database** that auto-initializes on first launch. No external database server is needed.
 
-```
+```text
 users       — System users (Admin / Teacher)
 student     — Student profiles
 class       — Class and section definitions
@@ -75,13 +78,13 @@ marks       — Student marks per subject
 
 ### Run the Application
 
-**Option 1 — PowerShell (Recommended)**
+#### Option 1 — PowerShell (Recommended)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File run_project.ps1
 ```
 
-**Option 2 — Batch File**
+#### Option 2 — Batch File
 
 ```batch
 run.bat
@@ -101,7 +104,7 @@ The script will automatically:
 
 ## Project Structure
 
-```
+```text
 Student-Management-System-Java-Swing/
 ├── src/
 │   ├── login.java          # Login screen (role-based auth)
@@ -142,7 +145,7 @@ Access to the Teacher Dashboard — can view and manage marks and exams.
 ## Dependencies
 
 | Library | Version | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | h2 | Latest | Embedded database engine |
 | jasperreports | 5.6.1 | PDF report generation |
 | iText | 2.1.7 | PDF rendering for JasperReports |
@@ -159,6 +162,4 @@ This project was developed for academic purposes at **NIBM** as part of the **En
 
 ---
 
-<div align="center">
-  Adheesha Sooriyaarachchi &nbsp;·&nbsp; Enterprise Application Development &nbsp;·&nbsp; NIBM &nbsp;·&nbsp; 2025
-</div>
+*Adheesha Sooriyaarachchi* · *Enterprise Application Development* · *NIBM* · *2025*
