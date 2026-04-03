@@ -11,12 +11,13 @@ import javax.swing.table.*;
 public class UITheme {
 
     // ─── Palette ───────────────────────────────────────────────────────────
-    public static final Color BG          = new Color(0x0B0D11); // Deeper black
-    public static final Color SURFACE     = new Color(0x13161C); // Richer slate surface
+    public static final Color BG          = new Color(0x0B0D11);
+    public static final Color SURFACE     = new Color(0x13161C);
     public static final Color SIDEBAR     = new Color(0x0E1116);
     public static final Color CARD        = new Color(0x191D24);
-    public static final Color ACCENT      = new Color(0x4078D1); // More professional blue
+    public static final Color ACCENT      = new Color(0x4078D1);
     public static final Color ACCENT_DARK = new Color(0x2D5AA3);
+    public static final Color ACCENT_LIT  = new Color(0x5690F0);
     public static final Color PURPLE      = new Color(0x6A52AD);
     public static final Color SUCCESS     = new Color(0x27AE60);
     public static final Color WARNING     = new Color(0xE67E22);
@@ -25,8 +26,8 @@ public class UITheme {
     public static final Color TEXT        = new Color(0xF0F0F0);
     public static final Color TEXT_MUTED  = new Color(0x8C9AB2);
     public static final Color BORDER      = new Color(0x2D3150);
-    public static final Color ROW_ALT     = new Color(0x1A1D2E);
-    public static final Color ROW_SEL     = new Color(0x2A3A5E);
+    public static final Color ROW_ALT     = new Color(0x15181F); // More subtle alt row
+    public static final Color ROW_SEL     = new Color(0x1E2532); // Refined selection bg
 
     // ─── Fonts ─────────────────────────────────────────────────────────────
     public static Font font(int style, float size) {
@@ -71,10 +72,22 @@ public class UITheme {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color c = getModel().isPressed()  ? bg.darker() :
-                          getModel().isRollover() ? bg.brighter() : bg;
-                g2.setColor(c);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                
+                boolean pressed = getModel().isPressed();
+                boolean hover = getModel().isRollover();
+                
+                Color c1 = pressed ? bg.darker() : hover ? bg : bg.darker();
+                Color c2 = pressed ? bg : hover ? ACCENT_LIT : bg;
+                
+                GradientPaint gp = new GradientPaint(0, 0, c1, 0, getHeight(), c2);
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                
+                if (hover && !pressed) {
+                    g2.setColor(new Color(255, 255, 255, 30));
+                    g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
+                }
+                
                 g2.dispose();
                 super.paintComponent(g);
             }
@@ -83,7 +96,7 @@ public class UITheme {
         b.setForeground(Color.WHITE);
         b.setContentAreaFilled(false);
         b.setOpaque(false);
-        b.setBorder(new EmptyBorder(10, 20, 10, 20));
+        b.setBorder(new EmptyBorder(10, 24, 10, 24));
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         b.setFocusPainted(false);
         return b;
@@ -202,7 +215,7 @@ public class UITheme {
         table.setBackground(BG);
         table.setForeground(TEXT);
         table.setFont(fontPlain(13f));
-        table.setRowHeight(40);
+        table.setRowHeight(44); // Slightly taller for better readability
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setSelectionBackground(ROW_SEL);
@@ -214,29 +227,52 @@ public class UITheme {
             @Override public Component getTableCellRendererComponent(
                     JTable t, Object val, boolean sel, boolean foc, int row, int col) {
                 super.getTableCellRendererComponent(t, val, sel, foc, row, col);
+                
                 if (sel) {
                     setBackground(ROW_SEL);
                 } else {
                     setBackground(row % 2 == 0 ? BG : ROW_ALT);
                 }
+                
                 setForeground(TEXT);
                 setFont(fontPlain(13f));
-                setBorder(new EmptyBorder(0, 16, 0, 16));
-                return this;
+                setBorder(new EmptyBorder(0, 20, 0, 20));
+                
+                // Add a vertical accent bar for selected row
+                JPanel p = new JPanel(new BorderLayout());
+                p.setBackground(getBackground());
+                if (sel && col == 0) {
+                    JPanel indicator = new JPanel();
+                    indicator.setPreferredSize(new Dimension(4, 0));
+                    indicator.setBackground(ACCENT);
+                    p.add(indicator, BorderLayout.WEST);
+                }
+                p.add(this, BorderLayout.CENTER);
+                return p;
             }
         });
         
         JTableHeader header = table.getTableHeader();
         header.setBackground(SIDEBAR);
-        header.setForeground(ACCENT);
-        header.setFont(fontBold(12f));
-        header.setPreferredSize(new Dimension(0, 44));
+        header.setForeground(TEXT_MUTED);
+        header.setFont(fontBold(11f)); // Smaller, caps header style
+        header.setPreferredSize(new Dimension(0, 48));
         header.setBorder(new MatteBorder(0, 0, 1, 0, BORDER));
         header.setReorderingAllowed(false);
         
-        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
-        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        headerRenderer.setBorder(new EmptyBorder(0, 16, 0, 16));
+        DefaultTableCellRenderer hRender = new DefaultTableCellRenderer() {
+            @Override public Component getTableCellRendererComponent(
+                    JTable t, Object v, boolean s, boolean f, int r, int c) {
+                super.getTableCellRendererComponent(t, v, s, f, r, c);
+                setBackground(SIDEBAR);
+                setForeground(ACCENT);
+                setFont(UITheme.fontBold(11f));
+                setBorder(new EmptyBorder(0, 20, 0, 20));
+                return this;
+            }
+        };
+        hRender.setHorizontalAlignment(SwingConstants.LEFT);
+        table.getTableHeader().setDefaultRenderer(hRender);
     }
 
     // ─── Styled scroll pane ────────────────────────────────────────────────

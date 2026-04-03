@@ -1,6 +1,6 @@
-# Student Management System - EAD2
+# Student Management System - EAD
 
-A full-featured desktop **Student Management System** built with Java Swing, featuring a modern dark-themed UI. Developed as coursework for the **Enterprise Application Development 02** module at **NIBM**.
+A full-featured desktop **Student Management System** built with Java Swing, featuring a modern dark-themed UI. Developed as coursework for the **Enterprise Application Development** module at **NIBM**.
 
 ---
 
@@ -155,7 +155,7 @@ Access to the Teacher Dashboard — can view and manage marks and exams.
 
 ## License
 
-This project was developed for academic purposes at **NIBM** as part of the **Enterprise Application Development 01** module coursework.
+This project was developed for academic purposes at **NIBM** as part of the **Enterprise Application Development** module coursework.
 
 ---
 
