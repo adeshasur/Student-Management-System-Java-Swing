@@ -26,11 +26,11 @@ public class teachermain extends JFrame {
     }
 
     private void buildUI() {
-        setTitle("Student Management System - EAD2 — Teacher Dashboard");
+        setTitle("Student Management System - EAD — Teacher Dashboard");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1000, 620);
+        setSize(1040, 680);
         setLocationRelativeTo(null);
-        setMinimumSize(new Dimension(800, 540));
+        setMinimumSize(new Dimension(860, 560));
 
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(UITheme.BG);
@@ -156,21 +156,25 @@ public class teachermain extends JFrame {
         body.add(Box.createVerticalStrut(36));
 
         // Quick grid for teacher
-        JPanel grid = new JPanel(new GridLayout(1, 2, 16, 16));
+        JPanel grid = new JPanel(new GridLayout(1, 2, 24, 24));
         grid.setOpaque(false);
-        grid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 130));
+        grid.setMaximumSize(new Dimension(800, 160));
         grid.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        grid.add(quickCard("", "Students", "Add and view student records", e -> new student().setVisible(true)));
-        grid.add(quickCard("", "Marks",    "Enter and manage student marks",  e -> new marks().setVisible(true)));
+        grid.add(quickCard("👥", "Manage Students", "View, add, and update student profiles", e -> new student().setVisible(true)));
+        grid.add(quickCard("📝", "Grading & Marks", "Enter and manage academic results",  e -> new marks().setVisible(true)));
 
         body.add(grid);
+        
+        // Add a bottom decorative illustration or empty area
+        body.add(Box.createVerticalGlue());
+        
         content.add(body, BorderLayout.CENTER);
         return content;
     }
 
-    private JPanel quickCard(String ignore, String title, String sub, ActionListener action) {
-        JPanel p = new JPanel(new BorderLayout(12, 0)) {
+    private JPanel quickCard(String iconStr, String title, String sub, ActionListener action) {
+        JPanel p = new JPanel(new BorderLayout(20, 0)) {
             boolean hovered = false;
             { addMouseListener(new MouseAdapter() {
                 public void mouseEntered(MouseEvent e) { hovered=true; repaint(); setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); }
@@ -180,19 +184,47 @@ public class teachermain extends JFrame {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(hovered ? new Color(0x1F232D) : UITheme.CARD);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
+                
+                if (hovered) {
+                    g2.setPaint(new GradientPaint(0, 0, new Color(0x1F232D), 0, getHeight(), new Color(0x171A21)));
+                } else {
+                    g2.setColor(UITheme.CARD);
+                }
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
+                
+                // Left accent bar
                 g2.setColor(UITheme.ACCENT);
-                g2.fillRoundRect(0, 0, 8, getHeight(), 16, 0); // Side indicator
+                g2.fillRoundRect(0, 0, 8, getHeight(), 24, 0); 
+                g2.fillRoundRect(0, 0, 8, 24, 0, 0); // Square top left
+                g2.fillRoundRect(0, getHeight()-24, 8, 24, 0, 0); // Square bot left
+                
+                // Border glow on hover
+                if (hovered) {
+                    g2.setColor(new Color(64, 120, 209, 50));
+                    g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 24, 24);
+                }
+                
                 g2.dispose();
             }
         };
         p.setOpaque(false);
-        JLabel tl = UITheme.label(title, 15f, true);
-        JLabel sl = UITheme.mutedLabel(sub); sl.setFont(UITheme.fontPlain(11f));
+        p.setBorder(new EmptyBorder(32, 32, 32, 24)); // More generous padding
+        
+        JLabel iconL = new JLabel(iconStr);
+        iconL.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 42));
+        iconL.setForeground(UITheme.ACCENT);
 
-        JPanel text = new JPanel(new GridLayout(2, 1, 0, 4));
-        text.setOpaque(false); text.add(tl); text.add(sl);
+        JLabel tl = UITheme.label(title, 20f, true);
+        JLabel sl = UITheme.mutedLabel(sub); 
+        sl.setFont(UITheme.fontPlain(13f));
+        sl.setForeground(new Color(0x90A0BE));
+
+        JPanel text = new JPanel(new GridLayout(2, 1, 0, 6));
+        text.setOpaque(false); 
+        text.add(tl); 
+        text.add(sl);
+        
+        p.add(iconL, BorderLayout.WEST);
         p.add(text, BorderLayout.CENTER);
         return p;
     }
